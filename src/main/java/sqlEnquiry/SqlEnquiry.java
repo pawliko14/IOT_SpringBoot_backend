@@ -70,7 +70,7 @@ public class SqlEnquiry {
 	/*
 	*** get historical variable from specyfic table
 	 */
-	public List<object_historical> getHostoricalVar_last_10(String ID, String table_name) throws  SQLException {
+	public List<object_historical> getHostoricalVar_last_10(int records, String table_name,String variable_name) throws  SQLException {
 
 
 
@@ -80,11 +80,14 @@ public class SqlEnquiry {
 
 		object_historical_MB5.clear();
 
-		String sql = " select variable ,value ,last_date ,last_time from plcvariables_historical ph \n" +
-				"        where variable  = 'MB5'\n" +
-				"        order by last_date desc , last_time  desc limit 20";
+		String sql = " select variable ,value ,last_date ,last_time from "+table_name+" ph \n" +
+				"        where variable  = ?\n" +
+				"        order by last_date desc , last_time  desc limit ?";
 
 		PreparedStatement stmnt = conn.prepareStatement(sql);
+		stmnt.setString(1,variable_name);
+		stmnt.setInt(2,records);
+
 		ResultSet rs = stmnt.executeQuery();
 
 
@@ -110,7 +113,57 @@ public class SqlEnquiry {
 
 		return object_historical_MB5;
 	}
+	public List<object_historical> getHostoricalVar_last_7_days(String timeperoid, String table_name, String variable_name) throws SQLException {
 
+		List<object_historical>  sample_historical = new ArrayList<>() ;
+
+
+//		if(!timeperoid.equals("week")){
+//			return null;
+//		}
+
+		int current_date_minus = timeperoid.equals("week") ?   7 :  0;
+
+		Connection conn = null;
+		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
+		conn = DriverManager.getConnection(url);
+
+		sample_historical.clear();
+
+		String sql = "   select * from "+table_name+" ph \n" +
+				"\t   where last_date  >= current_date -?\n" +
+				"\t   and last_date  <= current_date \n" +
+				"\t   and variable = ?";
+
+		PreparedStatement stmnt = conn.prepareStatement(sql);
+		stmnt.setInt(1,current_date_minus);
+		stmnt.setString(2,variable_name);
+
+		ResultSet rs = stmnt.executeQuery();
+
+
+		while(rs.next())
+		{
+			String variable = rs.getString("variable");
+			String value = rs.getString("value");
+			String last_date = rs.getString("last_date");
+			String last_time = rs.getString("last_time");
+
+
+
+			object_historical obj = new object_historical(variable,value,last_date,last_time);
+
+
+			sample_historical.add(obj);
+		}
+
+		stmnt.close();
+		rs.close();
+		conn.close();
+
+
+		return sample_historical;
+	}
 
 
 	public object_variables get_SingleVariable_from_Specific_table(String ID, String table_name) throws SQLException {
@@ -380,4 +433,6 @@ public class SqlEnquiry {
 		return obj;
 
 	}
+
+
 }

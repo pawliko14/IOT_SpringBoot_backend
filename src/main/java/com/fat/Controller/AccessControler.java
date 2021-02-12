@@ -47,10 +47,9 @@ public class AccessControler {
 		return obj.get_PLC_variables();
 	}
 
-	// not implemented YET!
-	@GetMapping("/plc_variables_historical/{records}")
-	public List<object_historical> get_historical_last_10(@PathVariable("records") String records) throws SQLException {
-		return obj.getHostoricalVar_last_10(records,"plcvariables_historical");
+	@GetMapping("/plc_variables_historical/{records}/{variable}")
+	public List<object_historical> get_historical_last_10(@PathVariable("records") int records, @PathVariable("variable") String variable) throws SQLException {
+		return obj.getHostoricalVar_last_10(records,"plcvariables_historical",  variable);
 	}
 	//////////////////////////////////////////////////////////////////
 
@@ -70,6 +69,12 @@ public class AccessControler {
 		return obj.get_SingleVariable_from_Specific_table(id,"tools_data");
 	}
 
+	//////////////////////////////////////////////////////////////////
+	/*
+	 *** Program Data
+	 */
+
+
 	@GetMapping("/getprogramdata")
 	public List<object_variables> get_programData() throws SQLException {
 		return obj.get_programData();
@@ -79,5 +84,18 @@ public class AccessControler {
 	public object_variables get_programData_ID(@PathVariable("id") String id) throws SQLException {
 		return obj.get_programData_id(id);
 	}
+
+	@GetMapping("/program_historical/{records}/{variable}")
+	public List<object_historical> get_historical_program_Data_last_10(@PathVariable("records") int records, @PathVariable("variable") String variable) throws SQLException {
+		return obj.getHostoricalVar_last_10(records,"program_historical",  variable);
+	}
+
+	@GetMapping("/program_historical/timeperoid/{timeperoid}/{variable}")
+	public List<object_historical> get_historial_data_last_7_days(@PathVariable("timeperoid") String timeperoid, @PathVariable("variable") String variable) throws SQLException {
+		return obj.getHostoricalVar_last_7_days(timeperoid,"program_historical",  variable);
+	}
+
+	//////////////////////////////////////////////////////////////////
+
 
 }
