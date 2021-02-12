@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.fat.access.AccessRepository;
 import com.fat.access.accessRepositoryimpl;
-import com.fat.repository.access;
 
 import sqlEnquiry.SqlEnquiry;
 import sqlObjects.*;
@@ -45,33 +44,7 @@ public class AccessControler {
 	{
 		return "Alive";
 	}
-	
-	
-	@GetMapping("/testowy")
-	public List<access>  getAll()
-	{
-		return impl.findAllWorkersSInce30days();
-	}
-	
-	@GetMapping("tescik")
-	public List<access> tescik()
-	{
-		return impl.tescik();
-	}
-	
-	@GetMapping("lastinout/{count}")
-	public List<GeneralTable> lastInOut(@PathVariable("count") int count)
-	{
 
-		return obj.mainEnguiry(count);
-	}
-	
-	
-	@GetMapping("/activeworkers")
-	public List<GeneralTable> StateOFworkersSinceDate()
-	{
-		return obj.peopleInFATlist();
-	}
 	@GetMapping("/plc_variables")
 	public List<object_variables> StateOfPLC_variables() throws SQLException {
 		return obj.get_PLC_variables();
@@ -98,18 +71,4 @@ public class AccessControler {
 		return obj.get_programData_id(id);
 	}
 
-
-
-
-	@GetMapping("/currentstate")
-	public List<WorkersAndID> CurrentStateOfPeopleInFAT()
-	{
-		return obj.getCurrentStateOfPeopleInFat();
-	}
-	
-	@GetMapping("workerinfo/{workerid}/{count}")
-	public UserHistory WorkerHistory(@PathVariable("workerid") int workerid, @PathVariable("count") int count) {
-		return obj.getUserHistory(workerid,count);
-	}
-	
 }
