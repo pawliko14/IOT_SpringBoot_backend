@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
-//@CrossOrigin(origins = "http://192.168.90.66:3000")  // <- for production purpose, on tests not necessary
+//@CrossOrigin(origins = "http://192.168.90.199:3000")  // <- for production purpose, on tests not necessary
 @RestController
 public class AccessControler {
 	@Autowired
@@ -30,25 +30,29 @@ public class AccessControler {
 		accessRepository = repo;
 		impl = i;
 	}
-	
-	
-	@GetMapping("/access")
-	public long getALlAccess()
-	{
-		return accessRepository.count();
-	}
-	
 
-	@GetMapping("/test")
-	public String returnTest()
-	{
-		return "Alive";
+	//////////////////////////////////////////////////////////////////
+	/*
+	*** Plc Variables
+	 */
+
+
+	@GetMapping("/plc_variables/{id}")
+	public object_variables get_plc_variables_ID(@PathVariable("id") String id) throws SQLException {
+		return obj.get_SingleVariable_from_Specific_table(id,"plcvariables_data");
 	}
 
 	@GetMapping("/plc_variables")
 	public List<object_variables> StateOfPLC_variables() throws SQLException {
 		return obj.get_PLC_variables();
 	}
+
+	// not implemented YET!
+	@GetMapping("/plc_variables_historical/{records}")
+	public List<object_historical> get_historical_last_10(@PathVariable("records") String records) throws SQLException {
+		return obj.getHostoricalVar_last_10(records,"plcvariables_historical");
+	}
+	//////////////////////////////////////////////////////////////////
 
 	//testing
 	@GetMapping("/gethistorical")
@@ -59,6 +63,11 @@ public class AccessControler {
 	@GetMapping("/getToolsData")
 	public List<object_variables> getToolsData() throws SQLException {
 		return obj.get_toolsData();
+	}
+
+	@GetMapping("/tools_data/{id}")
+	public object_variables get_tools_data_ID(@PathVariable("id") String id) throws SQLException {
+		return obj.get_SingleVariable_from_Specific_table(id,"tools_data");
 	}
 
 	@GetMapping("/getprogramdata")
