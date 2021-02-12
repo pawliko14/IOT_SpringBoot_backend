@@ -8,11 +8,7 @@ public class Connection2DB {
 	private static Connection conn;
 	public static Connection dbConnector()
 	{
-		try {	
-//			Class.forName("org.mariadb.jdbc.Driver");
-//			Connection conn=DriverManager.getConnection("jdbc:mariadb://192.168.90.123/fatdb","listy","listy1234");
-
-
+		try {
 			String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
 			conn = DriverManager.getConnection(url);
 

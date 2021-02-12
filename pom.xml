@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.fat</groupId>
-	<artifactId>access</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>access</name>
-	<description>Demo project for Spring Boot</description>
+	<artifactId>IOT</artifactId>
+	<version>0.1-IOT</version>
+	<name>FATIoT</name>
+	<description>Spring boot FAT IoT backend</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -45,11 +45,7 @@
 		   <version>2.7.0</version>
 		</dependency>
 		
-		    <dependency>
-		      <groupId>org.mariadb.jdbc</groupId>
-		      <artifactId>mariadb-java-client</artifactId>
-		      <version>1.5.7</version>
-		    </dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>
