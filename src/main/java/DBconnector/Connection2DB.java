@@ -19,4 +19,10 @@ public class Connection2DB {
 			return null;
 		}
 	}
+
+	public static String getURL() {
+		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
+
+		return url;
+	}
 }
