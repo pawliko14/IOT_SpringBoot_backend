@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import DBconnector.Connection2DB;
 import sqlObjects.*;
 
 
@@ -30,8 +31,7 @@ public class SqlEnquiry {
 	public List<object_historical> getHistorical_MB5() throws SQLException {
 
 		Connection conn = null;
-		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
-		conn = DriverManager.getConnection(url);
+		conn = DriverManager.getConnection(Connection2DB.getURL());
 
 		object_historical_MB5.clear();
 
@@ -75,8 +75,7 @@ public class SqlEnquiry {
 
 
 		Connection conn = null;
-		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
-		conn = DriverManager.getConnection(url);
+		conn = DriverManager.getConnection(Connection2DB.getURL());
 
 		object_historical_MB5.clear();
 
@@ -118,29 +117,100 @@ public class SqlEnquiry {
 		List<object_historical>  sample_historical = new ArrayList<>() ;
 
 
-//		if(!timeperoid.equals("week")){
-//			return null;
-//		}
+		int current_date_minus = 0;
 
-		int current_date_minus = timeperoid.equals("week") ?   7 :  0;
 
 		Connection conn = null;
-		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
-		conn = DriverManager.getConnection(url);
+		conn = DriverManager.getConnection(Connection2DB.getURL());
+		String sql = null;
+		PreparedStatement stmnt = null;
+		ResultSet rs = null;
+		switch(timeperoid)
+		{
+			case("week"):
+				 current_date_minus = timeperoid.equals("week") ?   7 :  0;
 
+				 sql = "   select  id,variable ,value ,last_date ,last_time  from "+table_name+" ph \n" +
+						"\t   where last_date  >= current_date -?\n" +
+						"\t   and last_date  <= current_date \n" +
+						"\t   and variable = ?";
+
+				 stmnt = conn.prepareStatement(sql);
+				stmnt.setInt(1,current_date_minus);
+				stmnt.setString(2,variable_name);
+
+				break;
+			case("yesterday"):
+				 current_date_minus = timeperoid.equals("yesterday") ?   1 :  0;
+
+				sql = "   select  id,variable ,value ,last_date ,last_time  from "+table_name+" ph \n" +
+						"\t   where last_date  >= current_date -?\n" +
+						"\t   and last_date  <= current_date -1 \n" +
+						"\t   and variable = ?";
+
+				stmnt = conn.prepareStatement(sql);
+
+				stmnt.setInt(1,current_date_minus);
+				stmnt.setString(2,variable_name);
+
+				 break;
+			case("today"):
+				current_date_minus = timeperoid.equals("today") ?   0 :  0;
+
+				sql = "   select  id,variable ,value ,last_date ,last_time  from "+table_name+" ph \n" +
+						"\t   where last_date  >= current_date \n" +
+						"\t   and last_date  <= current_date  \n" +
+						"\t   and variable = ?";
+
+				stmnt = conn.prepareStatement(sql);
+
+				stmnt.setString(1,variable_name);
+
+				break;
+			case("month") :
+				current_date_minus = timeperoid.equals("month") ?   30 :  0;
+
+				sql = "   select  id,variable ,value ,last_date ,last_time  from "+table_name+" ph \n" +
+						"\t   where last_date  >= current_date -? \n" +
+						"\t   and last_date  <= current_date  \n" +
+						"\t   and variable = ?";
+
+				stmnt = conn.prepareStatement(sql);
+
+				stmnt.setInt(1,current_date_minus);
+				stmnt.setString(2,variable_name);
+
+				break;
+			case("3month") :
+				current_date_minus = timeperoid.equals("month") ?   90 :  0;
+
+				sql = "   select  id,variable ,value ,last_date ,last_time  from "+table_name+" ph \n" +
+						"\t   where last_date  >= current_date -? \n" +
+						"\t   and last_date  <= current_date  \n" +
+						"\t   and variable = ?";
+
+				stmnt = conn.prepareStatement(sql);
+
+				stmnt.setInt(1,current_date_minus);
+				stmnt.setString(2,variable_name);
+
+				break;
+			case("alldata") :
+				// here special conditions for collecting all data
+
+				sql = "\t   select  id,variable ,value ,last_date ,last_time  from plcvariables_historical pph \n" +
+						"\t   where variable = ?";
+
+				stmnt = conn.prepareStatement(sql);
+
+				break;
+
+			default:
+				// heres some default condifition just in case
+				break;
+		}
 		sample_historical.clear();
-
-		String sql = "   select * from "+table_name+" ph \n" +
-				"\t   where last_date  >= current_date -?\n" +
-				"\t   and last_date  <= current_date \n" +
-				"\t   and variable = ?";
-
-		PreparedStatement stmnt = conn.prepareStatement(sql);
-		stmnt.setInt(1,current_date_minus);
-		stmnt.setString(2,variable_name);
-
-		ResultSet rs = stmnt.executeQuery();
-
+		 rs = stmnt.executeQuery();
 
 		while(rs.next())
 		{
@@ -170,8 +240,7 @@ public class SqlEnquiry {
 		object_variables obj = new object_variables();
 
 		Connection conn = null;
-		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
-		conn = DriverManager.getConnection(url);
+		conn = DriverManager.getConnection(Connection2DB.getURL());
 
 
 			// CAREFULL!!! VURNEABLE ON SQL INJECTION, table_name SHOULD BE STORED IN HASHMAP, THEN RETRIVED
@@ -221,15 +290,17 @@ public class SqlEnquiry {
 	}
 
 
-	public List<object_variables> get_PLC_variables() throws SQLException {
+	public List<object_variables> get_PLC_variables(String tableName) throws SQLException {
 		Connection conn = null;
-		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
-		conn = DriverManager.getConnection(url);
+		conn = DriverManager.getConnection(Connection2DB.getURL());
 
 		object_variablesList.clear();
 
-		String sql = "select id,last_changed_time ,status ,var,last_changed_date,var_meaning ,value ,var_path from plcvariables_data pd";
+		// CAREFUL -> CAN CUASE SQL INJECTION
+		String sql = "select id,last_changed_time ,status ,var,last_changed_date,var_meaning ,value ,var_path from "+tableName+" pd";
 
+			// careful its not working
+	//	String sql = String.format("select id,last_changed_time ,status ,var,last_changed_date,var_meaning ,value ,var_path from $1%s pd",  tableName);
 
 		try
 		{
@@ -281,8 +352,7 @@ public class SqlEnquiry {
 		List_programData.clear();
 
 		Connection conn = null;
-		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
-		conn = DriverManager.getConnection(url);
+		conn = DriverManager.getConnection(Connection2DB.getURL());
 
 
 
@@ -327,8 +397,7 @@ public class SqlEnquiry {
 
 	public List<object_variables> get_toolsData() throws SQLException {
 		Connection conn = null;
-		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
-		conn = DriverManager.getConnection(url);
+		conn = DriverManager.getConnection(Connection2DB.getURL());
 
 		tools_data.clear();
 
@@ -383,8 +452,7 @@ public class SqlEnquiry {
 		object_variables obj = new object_variables();
 
 		Connection conn = null;
-		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
-		conn = DriverManager.getConnection(url);
+		conn = DriverManager.getConnection(Connection2DB.getURL());
 
 
 
