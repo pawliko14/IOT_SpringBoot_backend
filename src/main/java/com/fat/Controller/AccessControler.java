@@ -14,7 +14,7 @@ import sqlObjects.*;
 import java.sql.SQLException;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3001")
 //@CrossOrigin(origins = "http://192.168.90.199:3000")  // <- for production purpose, on tests not necessary
 @RestController
 @RequestMapping("/api/v1")
@@ -23,7 +23,7 @@ public class AccessControler {
 	AccessRepository accessRepository;
 	@Autowired
 	accessRepositoryimpl impl;
-	
+
 	private SqlEnquiry obj = new SqlEnquiry();
 	
 	public AccessControler (AccessRepository repo,accessRepositoryimpl i)
