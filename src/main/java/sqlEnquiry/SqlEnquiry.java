@@ -70,6 +70,7 @@ public class SqlEnquiry {
 	/*
 	*** get historical variable from specyfic table
 	 */
+
 	public List<object_historical> getHostoricalVar_last_10(int records, String table_name,String variable_name) throws  SQLException {
 
 
@@ -145,25 +146,23 @@ public class SqlEnquiry {
 
 				sql = "   select  id,variable ,value ,last_date ,last_time  from "+table_name+" ph \n" +
 						"\t   where last_date  >= current_date -?\n" +
-						"\t   and last_date  <= current_date -1 \n" +
+						"\t   and last_date  <= current_date -? \n" +
 						"\t   and variable = ?";
 
 				stmnt = conn.prepareStatement(sql);
 
 				stmnt.setInt(1,current_date_minus);
-				stmnt.setString(2,variable_name);
+				stmnt.setInt(2,current_date_minus);
+				stmnt.setString(3,variable_name);
 
 				 break;
 			case("today"):
-				current_date_minus = timeperoid.equals("today") ?   0 :  0;
-
 				sql = "   select  id,variable ,value ,last_date ,last_time  from "+table_name+" ph \n" +
-						"\t   where last_date  >= current_date \n" +
-						"\t   and last_date  <= current_date  \n" +
+						"\t   where last_date  = current_date \n" +
+						"\t   and last_date  = current_date  \n" +
 						"\t   and variable = ?";
 
 				stmnt = conn.prepareStatement(sql);
-
 				stmnt.setString(1,variable_name);
 
 				break;
@@ -235,6 +234,139 @@ public class SqlEnquiry {
 		return sample_historical;
 	}
 
+
+	public List<object_historical> getHistoricalValues_based_on_ID_Module(int modulo_record,String table_name, String variable_name,String timeperoid) throws SQLException {
+
+
+		int current_date_minus = 0;
+
+
+		Connection conn = null;
+		conn = DriverManager.getConnection(Connection2DB.getURL());
+		String sql = null;
+		PreparedStatement stmnt = null;
+		ResultSet rs = null;
+		switch(timeperoid)
+		{
+			case("week"):
+				current_date_minus = timeperoid.equals("week") ?   7 :  0;
+
+				 sql = " select id,variable ,value ,last_date ,last_time from "+table_name+"  phd \n" +
+						"where id% ? = 0 \n" +
+						"and variable  = ?\n" +
+						"and last_date  >= current_date - ?\n" +
+						"and last_date  <= current_date\n" +
+						"order by id desc ";
+
+				stmnt = conn.prepareStatement(sql);
+				stmnt.setInt(1,modulo_record);
+				stmnt.setString(2,variable_name);
+				stmnt.setInt(3,current_date_minus);
+
+				break;
+			case("yesterday"):
+				current_date_minus = timeperoid.equals("yesterday") ?   1 :  0;
+
+				sql = " select id,variable ,value ,last_date ,last_time from "+table_name+"  phd \n" +
+						"where id% ? = 0 \n" +
+						"and variable  = ?\n" +
+						"and last_date  >= current_date - ?\n" +
+						"and last_date  <= current_date - ? \n" +
+						"order by id desc ";
+
+				stmnt = conn.prepareStatement(sql);
+				stmnt.setInt(1,modulo_record);
+				stmnt.setString(2,variable_name);
+				stmnt.setInt(3,current_date_minus);
+				stmnt.setInt(4,current_date_minus);
+
+				break;
+			case("today"):
+
+				sql = " select id,variable ,value ,last_date ,last_time from "+table_name+"  phd \n" +
+						"where id% ? = 0 \n" +
+						"and variable  = ?\n" +
+						"and last_date  = current_date \n" +
+						"and last_date  = current_date\n" +
+						"order by id desc ";
+
+				stmnt = conn.prepareStatement(sql);
+				stmnt.setInt(1,modulo_record);
+				stmnt.setString(2,variable_name);
+
+				break;
+			case("month") :
+				current_date_minus = timeperoid.equals("month") ?   30 :  0;
+
+				sql = " select id,variable ,value ,last_date ,last_time from "+table_name+"  phd \n" +
+						"where id% ? = 0 \n" +
+						"and variable  = ?\n" +
+						"and last_date  >= current_date - ?\n" +
+						"and last_date  <= current_date\n" +
+						"order by id desc ";
+
+				stmnt = conn.prepareStatement(sql);
+				stmnt.setInt(1,modulo_record);
+				stmnt.setString(2,variable_name);
+				stmnt.setInt(3,current_date_minus);
+
+				break;
+			case("3month") :
+				current_date_minus = timeperoid.equals("month") ?   90 :  0;
+
+				sql = " select id,variable ,value ,last_date ,last_time from "+table_name+"  phd \n" +
+						"where id% ? = 0 \n" +
+						"and variable  = ?\n" +
+						"and last_date  >= current_date - ?\n" +
+						"and last_date  <= current_date\n" +
+						"order by id desc ";
+
+				stmnt = conn.prepareStatement(sql);
+				stmnt.setInt(1,modulo_record);
+				stmnt.setString(2,variable_name);
+				stmnt.setInt(3,current_date_minus);
+
+				break;
+			case("alldata") :
+				// here special conditions for collecting all data
+
+				sql = "\t   select  id,variable ,value ,last_date ,last_time  from plcvariables_historical pph \n" +
+						"\t   where variable = ?";
+
+				stmnt = conn.prepareStatement(sql);
+
+				break;
+
+			default:
+				// heres some default condifition just in case
+				break;
+		}
+
+
+		rs = stmnt.executeQuery();
+
+		while(rs.next())
+		{
+			String variable = rs.getString("variable");
+			String value = rs.getString("value");
+			String last_date = rs.getString("last_date");
+			String last_time = rs.getString("last_time");
+
+
+
+			object_historical obj = new object_historical(variable,value,last_date,last_time);
+
+
+			object_historical_MB5.add(obj);
+		}
+
+		stmnt.close();
+		rs.close();
+		conn.close();
+
+
+		return object_historical_MB5;
+	}
 
 	public object_variables get_SingleVariable_from_Specific_table(String ID, String table_name) throws SQLException {
 		object_variables obj = new object_variables();

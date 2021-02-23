@@ -1,21 +1,16 @@
 
 package com.fat.Controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import com.fat.access.AccessRepository;
 import com.fat.access.accessRepositoryimpl;
-
 import sqlEnquiry.SqlEnquiry;
 import sqlObjects.*;
-
 import java.sql.SQLException;
 import java.util.List;
 
-//@CrossOrigin(origins = "http://localhost:3001")
-//@CrossOrigin(origins = "http://192.168.90.199:3000")  // <- for production purpose, on tests not necessary
+
 @RestController
 @RequestMapping("/api/v1")
 public class AccessControler {
@@ -43,6 +38,7 @@ public class AccessControler {
 		return obj.get_PLC_variables(tableName);
 	}
 
+
 	@GetMapping("/{xxx_historical}/{records}/{variable}")
 	public List<object_historical> get_historical_last_10(@PathVariable("xxx_historical") String table,@PathVariable("records") int records, @PathVariable("variable") String variable) throws SQLException {
 		return obj.getHostoricalVar_last_10(records,table,  variable);
@@ -53,6 +49,11 @@ public class AccessControler {
 		return obj.getHostoricalVar_last_7_days(timeperoid,table,  variable);
 	}
 
+
+	@GetMapping("/{xxx_historical}/modulo_record/{timeporoid}/{modulo_record}/{variable}")
+	public List<object_historical> get_historicaldata_based_on_ID_modulo(@PathVariable("xxx_historical") String table, @PathVariable("modulo_record") int modulo_record, @PathVariable("variable") String variable, @PathVariable("timeporoid") String timeporoid) throws SQLException {
+		return obj.getHistoricalValues_based_on_ID_Module(modulo_record ,table,  variable,timeporoid);
+	}
 
 
 }
