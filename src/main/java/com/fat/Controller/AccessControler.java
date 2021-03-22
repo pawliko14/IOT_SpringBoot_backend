@@ -1,36 +1,23 @@
 
 package com.fat.Controller;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
+import SentronEntities.Modbus_data;
+import SentronEntities.Modbus_historical;
 import org.springframework.web.bind.annotation.*;
-
-import com.fat.access.AccessRepository;
-import com.fat.access.accessRepositoryimpl;
-
 import sqlEnquiry.SqlEnquiry;
+import sqlEnquiry.SqlEnquirySentron;
 import sqlObjects.*;
-
 import java.sql.SQLException;
 import java.util.List;
 
-//@CrossOrigin(origins = "http://localhost:3001")
-//@CrossOrigin(origins = "http://192.168.90.199:3000")  // <- for production purpose, on tests not necessary
+
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping(value = "/api/v1", method = RequestMethod.GET)
 public class AccessControler {
-	@Autowired
-	AccessRepository accessRepository;
-	@Autowired
-	accessRepositoryimpl impl;
 
 	private SqlEnquiry obj = new SqlEnquiry();
+	private SqlEnquirySentron sqlEnquirySentron = new SqlEnquirySentron();
 	
-	public AccessControler (AccessRepository repo,accessRepositoryimpl i)
-	{
-		accessRepository = repo;
-		impl = i;
-	}
 
 
 	@GetMapping("/{xxx_data}/{id}")
@@ -43,16 +30,50 @@ public class AccessControler {
 		return obj.get_PLC_variables(tableName);
 	}
 
+
 	@GetMapping("/{xxx_historical}/{records}/{variable}")
 	public List<object_historical> get_historical_last_10(@PathVariable("xxx_historical") String table,@PathVariable("records") int records, @PathVariable("variable") String variable) throws SQLException {
-		return obj.getHostoricalVar_last_10(records,table,  variable);
+		return obj.getHistoricalValue_basedOnRowLimit(records,table,  variable);
 	}
 
 	@GetMapping("/{xxx_historical}/timeperoid/{timeperoid}/{variable}")
 	public List<object_historical> get_historial_data_word_based_days(@PathVariable("xxx_historical") String table, @PathVariable("timeperoid") String timeperoid, @PathVariable("variable") String variable) throws SQLException {
-		return obj.getHostoricalVar_last_7_days(timeperoid,table,  variable);
+		return obj.getHistoricalVal_basedOnWord(timeperoid,table,  variable);
 	}
 
 
+	@GetMapping("/{xxx_historical}/modulo_record/{timeporoid}/{modulo_record}/{variable}")
+	public List<object_historical> get_historicaldata_based_on_ID_modulo(@PathVariable("xxx_historical") String table, @PathVariable("modulo_record") int modulo_record, @PathVariable("variable") String variable, @PathVariable("timeporoid") String timeporoid) throws SQLException {
+		return obj.getHistoricalValues_based_on_ID_Module(modulo_record ,table,  variable,timeporoid);
+	}
+
+	/////////////////////////////////////////// SENTRON ////////////////////////////////////////////////
+
+	@GetMapping("/modbus_data")
+	public List<Modbus_data> get_modbus_data() throws SQLException {
+		return sqlEnquirySentron.getModbus_data();
+	}
+
+
+	@GetMapping("/modbus_data/{id}")
+	public Modbus_data get_modbus_dataByIndex(@PathVariable("id") int index) throws SQLException {
+		return sqlEnquirySentron.getModbus_dataByIndex(index);
+	}
+
+	////////////////////////// SENTRON HISTORICAL/////////////////////////////////
+
+	@GetMapping("/modbus_data_historical/timeperoid/{timeperoid}/{variable}")
+	public List<Modbus_historical> get_historialModbus_data_word_based_days(@PathVariable("timeperoid") String timeperoid, @PathVariable("variable") String variable) throws SQLException {
+		return sqlEnquirySentron.getHistoricalBasedOnWord(timeperoid, variable);
+	}
+
+
+	@GetMapping("/modbus_data_historical/{records}/{variableName}")
+	public List<Modbus_historical> get_historialModbus_data_word_based_onLimit(@PathVariable("records") int records, @PathVariable("variableName") String variableName) throws SQLException {
+		return sqlEnquirySentron.getHistoricalValue_basedOnRowLimit(records, variableName);
+	}
+
 
 }
+
+

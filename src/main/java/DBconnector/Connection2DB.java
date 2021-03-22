@@ -9,7 +9,7 @@ public class Connection2DB {
 	public static Connection dbConnector()
 	{
 		try {
-			String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
+			String url = "jdbc:postgresql://192.168.90.199/machinedata?user=iot&password=iotfat";
 			conn = DriverManager.getConnection(url);
 
 			return conn;
@@ -21,7 +21,7 @@ public class Connection2DB {
 	}
 
 	public static String getURL() {
-		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=Konrad&password=IamTheKing";
+		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=iot&password=iotfat";
 
 		return url;
 	}
