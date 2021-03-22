@@ -71,7 +71,7 @@ public class SqlEnquiry {
 	*** get historical variable from specyfic table
 	 */
 
-	public List<object_historical> getHostoricalVar_last_10(int records, String table_name,String variable_name) throws  SQLException {
+	public List<object_historical> getHistoricalValue_basedOnRowLimit(int records, String table_name, String variable_name) throws  SQLException {
 
 
 
@@ -113,7 +113,7 @@ public class SqlEnquiry {
 
 		return object_historical_MB5;
 	}
-	public List<object_historical> getHostoricalVar_last_7_days(String timeperoid, String table_name, String variable_name) throws SQLException {
+	public List<object_historical> getHistoricalVal_basedOnWord(String timeperoid, String table_name, String variable_name) throws SQLException {
 
 		List<object_historical>  sample_historical = new ArrayList<>() ;
 
