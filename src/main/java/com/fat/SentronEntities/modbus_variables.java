@@ -1,4 +1,4 @@
-package SentronEntities;
+package com.fat.SentronEntities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,50 +9,29 @@ import java.util.Objects;
 @Entity
 public class modbus_variables {
 
-
+    @Id
+    @GeneratedValue
     private Long ID;
+
+    @Column(nullable =  false)
     private String val_register;
+
+    @Column(nullable =  false)
     private boolean status;
+
+    @Column(nullable =  false)
     private int val_offset;
+
+    @Column(nullable =  false)
     private String default_unit;
 
-    public Long getID() {
-        return ID;
-    }
 
-    public void setID(Long ID) {
+    public modbus_variables(Long ID, String val_register, boolean status, int val_offset, String default_unit) {
+
         this.ID = ID;
-    }
-
-    public String getVal_register() {
-        return val_register;
-    }
-
-    public void setVal_register(String val_register) {
         this.val_register = val_register;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
         this.status = status;
-    }
-
-    public int getVal_offset() {
-        return val_offset;
-    }
-
-    public void setVal_offset(int val_offset) {
         this.val_offset = val_offset;
-    }
-
-    public String getDefault_unit() {
-        return default_unit;
-    }
-
-    public void setDefault_unit(String default_unit) {
         this.default_unit = default_unit;
     }
 

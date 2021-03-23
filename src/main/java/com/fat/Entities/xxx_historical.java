@@ -1,4 +1,4 @@
-package Entities;
+package com.fat.Entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
