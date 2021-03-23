@@ -1,4 +1,4 @@
-package sqlObjects;
+package com.fat.sqlObjects;
 
 import java.util.Objects;
 

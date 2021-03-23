@@ -1,11 +1,11 @@
-package sqlEnquiry;
+package com.fat.sqlEnquiry;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import DBconnector.Connection2DB;
-import sqlObjects.*;
+import com.fat.DBconnector.Connection2DB;
+import com.fat.sqlObjects.*;
 
 
 public class SqlEnquiry {

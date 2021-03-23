@@ -1,11 +1,3 @@
-com\fat\access\Greeting.class
 com\fat\repository\cards_name_surname_nrhacosoft.class
 com\fat\repository\access.class
 com\fat\Controller\AccessControler.class
-com\fat\Controller\GreetingController.class
-com\fat\access\AccessRepository.class
-sqlEnquiry\SqlEnquiry.class
-com\fat\access\accessRepositoryimpl.class
-DBconnector\Connection2DB.class
-com\fat\access\Cards_nameRepository.class
-com\fat\access\AccessApplication.class

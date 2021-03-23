@@ -1,9 +1,6 @@
 package com.fat.repository;
-
 import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.io.Serializable;
 
 @Entity
