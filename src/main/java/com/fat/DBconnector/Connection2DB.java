@@ -9,7 +9,7 @@ public class Connection2DB {
 	public static Connection dbConnector()
 	{
 		try {
-			String url = "jdbc:postgresql://192.168.90.199/machinedata?user=iot_x&password=iotfat";
+			String url = "jdbc:postgresql://host.docker.internal:5432/postgres?user=iot_x&password=iotfat";
 			conn = DriverManager.getConnection(url);
 
 			return conn;
@@ -21,7 +21,7 @@ public class Connection2DB {
 	}
 
 	public static String getURL() {
-		String url = "jdbc:postgresql://192.168.90.199/machinedata?user=iot&password=iotfat";
+		String url = "jdbc:postgresql://host.docker.internal:5432/postgres?user=iot&password=iotfat";
 
 		return url;
 	}

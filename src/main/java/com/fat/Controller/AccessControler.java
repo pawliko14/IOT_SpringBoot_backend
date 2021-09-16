@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequestMapping(value = "/api/v1", method = RequestMethod.GET)
 public class AccessControler {
 
-//	private SqlEnquiry obj = new SqlEnquiry();
+	private SqlEnquiry obj = new SqlEnquiry();
 
 	@Autowired
 	private Modbus_dataService modbus_dataService;
@@ -27,32 +27,32 @@ public class AccessControler {
 	private Modbus_HistoricalService modbus_historicalService;
 
 		// temporary commented
-//	@GetMapping("/{xxx_data}/{id}")
-//	public object_variables get_plc_variables_ID(@PathVariable("xxx_data") String table,@PathVariable("id") String id) throws SQLException {
-//		return obj.get_SingleVariable_from_Specific_table(id,table);
-//	}
-//
-//	@GetMapping("/{xxx_data}")
-//	public List<object_variables> StateOfPLC_variables(@PathVariable("xxx_data") String tableName) throws SQLException {
-//		return obj.get_PLC_variables(tableName);
-//	}
-//
-//
-//	@GetMapping("/{xxx_historical}/{records}/{variable}")
-//	public List<object_historical> get_historical_last_10(@PathVariable("xxx_historical") String table,@PathVariable("records") int records, @PathVariable("variable") String variable) throws SQLException {
-//		return obj.getHistoricalValue_basedOnRowLimit(records,table,  variable);
-//	}
-//
-//	@GetMapping("/{xxx_historical}/timeperoid/{timeperoid}/{variable}")
-//	public List<object_historical> get_historial_data_word_based_days(@PathVariable("xxx_historical") String table, @PathVariable("timeperoid") String timeperoid, @PathVariable("variable") String variable) throws SQLException {
-//		return obj.getHistoricalVal_basedOnWord(timeperoid,table,  variable);
-//	}
-//
-//
-//	@GetMapping("/{xxx_historical}/modulo_record/{timeporoid}/{modulo_record}/{variable}")
-//	public List<object_historical> get_historicaldata_based_on_ID_modulo(@PathVariable("xxx_historical") String table, @PathVariable("modulo_record") int modulo_record, @PathVariable("variable") String variable, @PathVariable("timeporoid") String timeporoid) throws SQLException {
-//		return obj.getHistoricalValues_based_on_ID_Module(modulo_record ,table,  variable,timeporoid);
-//	}
+	@GetMapping("/{xxx_data}/{id}")
+	public object_variables get_plc_variables_ID(@PathVariable("xxx_data") String table,@PathVariable("id") String id) throws SQLException {
+		return obj.get_SingleVariable_from_Specific_table(id,table);
+	}
+
+	@GetMapping("/{xxx_data}")
+	public List<object_variables> StateOfPLC_variables(@PathVariable("xxx_data") String tableName) throws SQLException {
+		return obj.get_PLC_variables(tableName);
+	}
+
+
+	@GetMapping("/{xxx_historical}/{records}/{variable}")
+	public List<object_historical> get_historical_last_10(@PathVariable("xxx_historical") String table,@PathVariable("records") int records, @PathVariable("variable") String variable) throws SQLException {
+		return obj.getHistoricalValue_basedOnRowLimit(records,table,  variable);
+	}
+
+	@GetMapping("/{xxx_historical}/timeperoid/{timeperoid}/{variable}")
+	public List<object_historical> get_historial_data_word_based_days(@PathVariable("xxx_historical") String table, @PathVariable("timeperoid") String timeperoid, @PathVariable("variable") String variable) throws SQLException {
+		return obj.getHistoricalVal_basedOnWord(timeperoid,table,  variable);
+	}
+
+
+	@GetMapping("/{xxx_historical}/modulo_record/{timeporoid}/{modulo_record}/{variable}")
+	public List<object_historical> get_historicaldata_based_on_ID_modulo(@PathVariable("xxx_historical") String table, @PathVariable("modulo_record") int modulo_record, @PathVariable("variable") String variable, @PathVariable("timeporoid") String timeporoid) throws SQLException {
+		return obj.getHistoricalValues_based_on_ID_Module(modulo_record ,table,  variable,timeporoid);
+	}
 
 	/////////////////////////////////////////// SENTRON ////////////////////////////////////////////////
 
